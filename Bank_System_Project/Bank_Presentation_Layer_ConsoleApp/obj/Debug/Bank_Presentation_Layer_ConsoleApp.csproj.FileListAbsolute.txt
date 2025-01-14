@@ -1,0 +1,13 @@
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Presentation_Layer_ConsoleApp.exe.config
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Presentation_Layer_ConsoleApp.exe
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Presentation_Layer_ConsoleApp.pdb
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Business_Layer.dll
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Data_Layer.dll
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Business_Layer.pdb
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\bin\Debug\Bank_Data_Layer.pdb
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.AssemblyReference.cache
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.SuggestedBindingRedirects.cache
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.CoreCompileInputs.cache
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.CopyComplete
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.exe
+C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.pdb

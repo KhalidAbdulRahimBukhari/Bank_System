@@ -1,0 +1,14 @@
+C:\C# Files\MyBankSystemDesktopApp\bin\Debug\MyBankSystemDesktopApp.exe.config
+C:\C# Files\MyBankSystemDesktopApp\bin\Debug\MyBankSystemDesktopApp.exe
+C:\C# Files\MyBankSystemDesktopApp\bin\Debug\MyBankSystemDesktopApp.pdb
+C:\C# Files\MyBankSystemDesktopApp\bin\Debug\BankBusinessLayer.dll
+C:\C# Files\MyBankSystemDesktopApp\bin\Debug\BankBusinessLayer.pdb
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\BankcPresentationLayer.csproj.AssemblyReference.cache
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\BankcPresentationLayer.csproj.SuggestedBindingRedirects.cache
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.frmUserLogin.resources
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.Properties.Resources.resources
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\BankcPresentationLayer.csproj.GenerateResource.cache
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\BankcPresentationLayer.csproj.CoreCompileInputs.cache
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\BankcPresentationLayer.csproj.CopyComplete
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.exe
+C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.pdb
