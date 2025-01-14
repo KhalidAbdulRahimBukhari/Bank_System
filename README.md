@@ -19,5 +19,6 @@ A user-friendly desktop application designed to simplify bank management operati
 https://bit.ly/csBankSystem
 
 Please Press Star if it was helpful
+
 Thank you
    
