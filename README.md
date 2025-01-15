@@ -15,6 +15,19 @@ A user-friendly desktop application designed to simplify bank management operati
 - **ADO.NET**: Database connectivity and operations.
 - **SQL Relational Database**: Efficient storage and management of data.
 
+## Installation
+
+### Set Up the Database:
+1. Install **SQL Server**.
+2. Run the provided SQL Database in project files.
+
+### Configure the Application:
+1. Update the database connection string in class clsData_Access_Settings.
+
+### Build and Run:
+1. Open the project in **Visual Studio**.
+2. Build the solution and run the application.
+
 ## Project Overview
 https://bit.ly/csBankSystem
 
