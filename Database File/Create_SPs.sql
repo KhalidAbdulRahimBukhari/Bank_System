@@ -75,3 +75,100 @@
 --							Update Client OR User  
 ---------------------------------------------------------------------------
 
+
+--create PROCEDURE SP_UpdateClient
+--    -- Parameters for the WHERE clause
+--    @Client_ID INT,
+    
+--    -- Parameters for the Clients table update
+--    @PinCode NVARCHAR(20),  -- Use appropriate length/type
+--    @Balance DECIMAL(18, 2), -- Use appropriate precision/scale
+    
+--    -- Parameters for the Persons table update (NVARCHAR for strings is safest)
+--    @FirstName NVARCHAR(50),
+--    @LastName NVARCHAR(50),
+--    @Email NVARCHAR(100),
+--    @Phone NVARCHAR(20),
+--    @Country NVARCHAR(50),
+--    @City NVARCHAR(50),
+--    @Street NVARCHAR(100)
+--AS
+--BEGIN
+
+--    -- Update 1: The Clients table
+--    UPDATE Clients
+--    SET  
+--        PinCode = @PinCode,
+--        Balance = @Balance
+--    WHERE
+--        Client_ID = @Client_ID;
+        
+--    -- Update 2: The Persons table (Uses a JOIN for efficiency instead of a subquery)
+--    UPDATE P
+--    SET
+--        FirstName = @FirstName,
+--        LastName = @LastName,
+--        Email = @Email,
+--        Phone = @Phone,
+--        Country = @Country,
+--        City = @City,
+--        Street = @Street
+--    FROM
+--        Persons P
+--    INNER JOIN 
+--        Clients C ON P.Person_ID = C.Person_ID
+--    WHERE
+--        C.Client_ID = @Client_ID;
+
+--END
+
+
+
+
+--create PROCEDURE SP_UpdateUser
+--    -- Parameters for the WHERE clause (Primary Key/Identifier)
+--    @User_ID INT,
+    
+--    -- Added @Person_ID as requested
+--    @Person_ID INT, 
+    
+--    -- Parameters for the Users table
+--    @UserName NVARCHAR(50),
+--    @Password NVARCHAR(50), 
+--    @Permissions INT,
+    
+--    -- Parameters for the Persons table
+--    @FirstName NVARCHAR(50),
+--    @LastName NVARCHAR(50),
+--    @Email NVARCHAR(100),
+--    @Phone NVARCHAR(20),
+--    @Country NVARCHAR(50),
+--    @City NVARCHAR(50),
+--    @Street NVARCHAR(100)
+--AS
+--BEGIN
+
+--    -- Update 1: The Users table
+--    UPDATE Users
+--    SET  
+--        Person_ID = @Person_ID, -- Person_ID explicitly updated here
+--        UserName = @UserName,
+--        [Password] = @Password,
+--        Permissions = @Permissions
+--    WHERE
+--        User_ID = @User_ID;
+        
+--    -- Update 2: The Persons table (Uses the provided @Person_ID in the WHERE clause)
+--    UPDATE Persons
+--    SET
+--        FirstName = @FirstName,
+--        LastName = @LastName,
+--        Email = @Email,
+--        Phone = @Phone,
+--        Country = @Country,
+--        City = @City,
+--        Street = @Street
+--    WHERE
+--        Person_ID = @Person_ID;
+
+--END
