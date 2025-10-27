@@ -13,53 +13,58 @@ namespace Bank_Data_Layer
         /// <param name="Client_ID"></param>
         /// <returns> true if client found </returns> false if client not found
         public static bool Find_Client_By_ID
-            (int Client_ID, ref int Person_ID, ref string AccountNumber, ref string PinCode, ref double Balance
-            , ref string firstname, ref string lastname, ref string email,
-            ref string phone, ref string country, ref string city, ref string street)
+    (int Client_ID, ref int Person_ID, ref string AccountNumber, ref string PinCode, ref double Balance
+    , ref string firstname, ref string lastname, ref string email,
+    ref string phone, ref string country, ref string city, ref string street)
         {
             bool IsFound = false;
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from ClientPersonView where Client_ID = @Client_ID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetClientByID";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    
+                    command.CommandType = CommandType.StoredProcedure;
 
-                    Person_ID = (int)reader["Person_ID"];
-                    AccountNumber = (string)reader["AccountNumber"];
-                    PinCode = (string)reader["PinCode"];
-                    Balance = Convert.ToDouble(reader["Balance"]);
-                    firstname = (string)reader["FirstName"];
-                    lastname = (string)reader["LastName"];
-                    email = (string)reader["Email"];
-                    phone = (string)reader["Phone"];
-                    country = (string)reader["Country"];
-                    city = (string)reader["City"];
-                    street = (string)reader["Street"];
-                }
-            }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error : " +  ex.Message);
-                IsFound = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
+
+                    try
+                    {
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+                                Person_ID = (int)reader["Person_ID"];
+                                AccountNumber = (string)reader["AccountNumber"];
+                                PinCode = (string)reader["PinCode"];
+                                Balance = Convert.ToDouble(reader["Balance"]);
+                                firstname = (string)reader["FirstName"];
+                                lastname = (string)reader["LastName"];
+                                email = (string)reader["Email"];
+                                phone = (string)reader["Phone"];
+                                country = (string)reader["Country"];
+                                city = (string)reader["City"];
+                                street = (string)reader["Street"];
+                            }
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        //Console.WriteLine("Error : " +  ex.Message);
+                        IsFound = false;
+                    }
+                   
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
             return IsFound;
         }
@@ -87,10 +92,10 @@ namespace Bank_Data_Layer
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
+                        command.CommandType = CommandType.StoredProcedure;
 
                     try
                     {
-                        command.CommandType = CommandType.StoredProcedure;
                         connection.Open();
 
                         // Added using for SqlDataReader
@@ -121,13 +126,7 @@ namespace Bank_Data_Layer
                     {
                         Console.WriteLine("Error : " + ex.Message);
                         IsFound = false;
-                    }
-                    finally
-                    {
-                        // This line is redundant due to 'using (SqlConnection connection...)', 
-                        // but kept as requested not to remove it.
-                        connection.Close();
-                    }
+                    }                
                 } // SqlCommand disposed here
             } // SqlConnection closed and disposed here
 

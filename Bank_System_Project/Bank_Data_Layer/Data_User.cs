@@ -12,54 +12,57 @@ namespace Bank_Data_Layer
     public class clsData_User
     {
         public static bool Find_By_User_ID(int User_ID, ref string Username, ref string Password, ref int Permissions, ref int Person_ID
-               , ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Country
-               , ref string City, ref string street)
+        , ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Country
+        , ref string City, ref string street)
         {
             bool IsFound = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from UserPersonView
-                            where User_ID = @User_ID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@User_ID", User_ID);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetUserByID";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if(reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
 
-                    Username = (string)reader["UserName"];
-                    Password = (string)reader["Password"];
-                    Permissions = (int)reader["Permissions"];
-                    Person_ID = (int)reader["Person_ID"];
-                    FirstName = (string)reader["FirstName"];
-                    LastName = (string)reader["LastName"];
-                    Email = (string)reader["Email"];
-                    Phone = (string)reader["Phone"];
-                    Country = (string)reader["Country"];
-                    City = (string)reader["City"];
-                    street = (string)reader["street"];
-                }
-                
-                
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    command.Parameters.AddWithValue("@User_ID", User_ID);
 
+                    try
+                    {
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+                                Username = (string)reader["UserName"];
+                                Password = (string)reader["Password"];
+                                Permissions = (int)reader["Permissions"];
+                                Person_ID = (int)reader["Person_ID"];
+                                FirstName = (string)reader["FirstName"];
+                                LastName = (string)reader["LastName"];
+                                Email = (string)reader["Email"];
+                                Phone = (string)reader["Phone"];
+                                Country = (string)reader["Country"];
+                                City = (string)reader["City"];
+                                street = (string)reader["street"];
+                            }
+
+
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                    }                   
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsFound;
@@ -68,54 +71,55 @@ namespace Bank_Data_Layer
 
 
         public static bool Find_By_UserName(ref int User_ID, string Username, ref string Password, ref int Permissions, ref int Person_ID
-              , ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Country
-              , ref string City, ref string street)
+         , ref string FirstName, ref string LastName, ref string Email, ref string Phone, ref string Country
+         , ref string City, ref string street)
         {
             bool IsFound = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from UserPersonView
-                            where UserName = @UserName";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@UserName", Username);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetUserByUserName";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
 
-                    User_ID = (int)reader["User_ID"];
-                    Password = (string)reader["Password"];
-                    Permissions = (int)reader["Permissions"];
-                    Person_ID = (int)reader["Person_ID"];
-                    FirstName = (string)reader["FirstName"];
-                    LastName = (string)reader["LastName"];
-                    Email = (string)reader["Email"];
-                    Phone = (string)reader["Phone"];
-                    Country = (string)reader["Country"];
-                    City = (string)reader["City"];
-                    street = (string)reader["street"];
-                }
+                    command.Parameters.AddWithValue("@UserName", Username);
 
+                    try
+                    {
+                        connection.Open();
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                IsFound = true;
 
+                                User_ID = (int)reader["User_ID"];
+                                Password = (string)reader["Password"];
+                                Permissions = (int)reader["Permissions"];
+                                Person_ID = (int)reader["Person_ID"];
+                                FirstName = (string)reader["FirstName"];
+                                LastName = (string)reader["LastName"];
+                                Email = (string)reader["Email"];
+                                Phone = (string)reader["Phone"];
+                                Country = (string)reader["Country"];
+                                City = (string)reader["City"];
+                                street = (string)reader["street"];
+                            }
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                    }
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsFound;

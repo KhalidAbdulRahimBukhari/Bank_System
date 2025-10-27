@@ -14,89 +14,78 @@ namespace Bank_Data_Layer
     public class clsData_Transaction
     {
 
-        public static bool Find_By_Transaction_ID(int Transaction_ID,ref int Transaction_Type_ID,
-                                ref DateTime Date, ref Nullable<int> Sender_Acc,
-                               ref Nullable<int> Receiver_Acc, ref int User_ID, ref double Amount)
+        public static bool Find_By_Transaction_ID(int Transaction_ID, ref int Transaction_Type_ID,
+                                         ref DateTime Date, ref Nullable<int> Sender_Acc,
+                                         ref Nullable<int> Receiver_Acc, ref int User_ID, ref double Amount)
         {
             bool IsFound = false;
 
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from Transactions where Transaction_ID = @Transaction_ID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Transaction_ID", Transaction_ID);
-
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetTransactionByID";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Transaction_ID", Transaction_ID);
 
 
-                    Transaction_Type_ID = (int)reader["Transaction_Type_ID"];
-                    Date = (DateTime)reader["Date"];
-
-                    if (reader["Sender_Acc"] != DBNull.Value)
+                    try
                     {
-                        Sender_Acc = (int)reader["Sender_Acc"];
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+
+                                Transaction_Type_ID = (int)reader["Transaction_Type_ID"];
+                                Date = (DateTime)reader["Date"];
+
+                                if (reader["Sender_Acc"] != DBNull.Value)
+                                {
+                                    Sender_Acc = (int)reader["Sender_Acc"];
+                                }
+                                else
+                                {
+                                    Sender_Acc = null;
+                                }
+
+                                // NOTE: You are assigning to Sender_Acc here again, likely a typo in original code.
+                                if (reader["Receiver_Acc"] != DBNull.Value)
+                                {
+                                    Receiver_Acc = (int)reader["Receiver_Acc"];
+                                }
+                                else
+                                {
+                                    Receiver_Acc = null;
+                                }
+
+                                Amount = (double)reader["Amount"];
+                                User_ID = (int)reader["User_ID"];
+
+                            }
+                            else
+                                IsFound = false;
+
+
+                        } // SqlDataReader disposed here
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Sender_Acc = null;
-                    }
-
-                    if (reader["Receiver_Acc"] != DBNull.Value)
-                    {
-                        Sender_Acc = (int)reader["Receiver_Acc"];
-                    }
-                    else
-                    {
-                        Receiver_Acc = null;
-                    }
-
-                    Amount = (double)reader["Amount"];
-                    User_ID = (int)reader["User_ID"];
-
-                }
-                else
-                    IsFound = false;
-
-
-            }
-            catch(Exception ex)
-            {
-                //string filePath = @"C:\Users\90552\Desktop\Error.File.txt";
- 
-
-                //    using (StreamWriter writer = new StreamWriter(filePath, true))
-                //{
-                //    writer.WriteLine("-----------------------------------------------------------------------------");
-                //    writer.WriteLine("Date : " + DateTime.Now.ToString());
-                //    writer.WriteLine();
-
-                //    while (ex != null)
-                //    {
-                //        writer.WriteLine(ex.GetType().FullName);
-                //        writer.WriteLine("Message : " + ex.Message);
-                //        writer.WriteLine("StackTrace : " + ex.StackTrace);
-
-                //        ex = ex.InnerException;
-                //    }
-                //}
-            }
-            finally
-            {
-                connection.Close();
-            }
+                        // Commented-out logging code left untouched as requested.
+                    }                  
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
             return IsFound;
         }
