@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -411,35 +412,35 @@ namespace Bank_Data_Layer
         {
             DataTable dt = new DataTable();
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from Transaction_View;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-
             try
             {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
                 {
-                    dt.Load(reader);
+                    string query = "SP_GetAllTransactions";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                dt.Load(reader);
+                            }
+                        }
+
+
+                    }
                 }
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Error : " + ex.Message);
-                connection.Close();
                 return null;
             }
-            finally
-            {
-                connection.Close();
-            }
-
+                
             return dt;
         }
 

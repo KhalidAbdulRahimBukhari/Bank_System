@@ -321,43 +321,53 @@ namespace Bank_Data_Layer
             return (Changes > 1);
         }
 
-
         public static DataTable Get_All_Users()
         {
+            // The DataTable to hold the results
             DataTable dt = new DataTable();
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from UserPersonView;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-
+            // Use a try-catch block to handle errors outside the resource management
             try
             {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if(reader.HasRows)
+                // 1. Use 'using' for SqlConnection
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
                 {
-                    dt.Load(reader);
-                }
+                    string procedureName = "SP_GetAllUsers";
+
+                    // 2. Use 'using' for SqlCommand
+                    using (SqlCommand command = new SqlCommand(procedureName, connection))
+                    {
+                        // CRITICAL FIX: Tell the command that the text is a Stored Procedure
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        connection.Open();
+
+                        // 3. Use 'using' for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                // Load the data directly into the DataTable
+                                dt.Load(reader);
+                            }
+                        } // SqlDataReader is closed and disposed here
+
+                    } // SqlCommand is disposed here
+
+                } // SqlConnection is closed and disposed here
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error : " + ex.Message);
-                connection.Close();
+                // Log the error
+                Console.WriteLine("Error: " + ex.Message);
+
+                // On error, return null or an empty DataTable
                 return null;
-            }
-            finally
-            {
-                connection.Close();
             }
 
             return dt;
-
         }
+   
 
         public static bool Is_User_Exist(int User_ID)
         {

@@ -11,3 +11,8 @@ C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\
 C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.CopyComplete
 C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.exe
 C:\C# Files\MyBankSystemDesktopApp\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.AssemblyReference.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.exe.config
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.exe
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Presentation_Layer_ConsoleApp\obj\Debug\Bank_Presentation_Layer_ConsoleApp.pdb

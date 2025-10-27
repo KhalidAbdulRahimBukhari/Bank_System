@@ -472,40 +472,38 @@ namespace Bank_Data_Layer
         {
             DataTable dt = new DataTable();
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from ClientPersonView";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
             try
             {
-                connection.Open();
-
-                SqlDataReader read = command.ExecuteReader();
-
-                if (read.HasRows)
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
                 {
-                    dt.Load(read);
-                }
+                    string query = "SP_GetAllClients";
+
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                            command.CommandType = CommandType.StoredProcedure;
+                       
+                            connection.Open();
+
+                            using (SqlDataReader read = command.ExecuteReader())
+                            {
+                                if (read.HasRows)
+                                {
+                                    dt.Load(read);
+                                }
+                            } //sql Datareader is closed and disposed 
+
+                    }// Sqlcommand is disposed here
+
+                }// connection is closed and disposed here
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                //Console.WriteLine("Error : " + ex.Message);
-                //connection.Close();
-                //return null;
-            }
-            finally
-            {
-                connection.Close();
+                 return null;
             }
 
-            return dt;
+                        return dt;
 
         }
-
-
-
     }
 }
