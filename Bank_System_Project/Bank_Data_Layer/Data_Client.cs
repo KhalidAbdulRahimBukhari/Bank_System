@@ -322,68 +322,55 @@ namespace Bank_Data_Layer
 
 
         public static bool Update_Client(int Client_ID, string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street)
+    , string firstname, string lastname, string email,
+    string phone, string country, string city, string street)
         {
             bool IsUpdated = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // we have to update each person info and client info seperately becuase they are 2 different tables
-
-            string query = @"UPDATE Persons
-                                             SET
-                                                 [FirstName] = @FirstName
-                                                ,[LastName] = @LastName
-                                                ,[Email] = @Email
-                                                ,[Phone] = @Phone
-                                                ,[Country] = @Country
-                                                ,[City] = @City
-                                                ,[Street] = @Street
-                                            WHERE
-                                              Person_ID = (select Clients.Person_ID from Clients where Client_ID = @Client_ID);
-                                              UPDATE Clients
-                                                 SET 
-                                                     [PinCode] = @PinCode
-                                                    ,[Balance] = @Balance
-                                               WHERE
-                                                     Client_ID = @Client_ID;";
-
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@street", street);
-
-            command.Parameters.AddWithValue("@PinCode", PinCode);
-            command.Parameters.AddWithValue("@Balance", Balance);
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                // we have to update each person info and client info seperately becuase they are 2 different tables
 
-                int RowsEffected = command.ExecuteNonQuery();
+                string query = @"SP_UpdateClient";
 
-                if (RowsEffected > 0)
-                    IsUpdated = true;
-                else
-                    IsUpdated = false;
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@FirstName", firstname);
+                    command.Parameters.AddWithValue("@LastName", lastname);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Phone", phone);
+                    command.Parameters.AddWithValue("@Country", country);
+                    command.Parameters.AddWithValue("@City", city);
+                    command.Parameters.AddWithValue("@street", street);
+
+                    command.Parameters.AddWithValue("@PinCode", PinCode);
+                    command.Parameters.AddWithValue("@Balance", Balance);
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
+
+                    try
+                    {
+                        connection.Open();
+
+                        int RowsEffected = command.ExecuteNonQuery();
+
+                        if (RowsEffected > 0)
+                            IsUpdated = true;
+                        else
+                            IsUpdated = false;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                    }
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsUpdated;

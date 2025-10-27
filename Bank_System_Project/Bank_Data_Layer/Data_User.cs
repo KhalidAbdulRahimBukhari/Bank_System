@@ -200,69 +200,55 @@ namespace Bank_Data_Layer
         }
 
 
-        public static bool Update_User(int User_ID , int Person_ID ,string Username, string Password, int Permissions,
-           string FirstName, string LastName, string Email, string Phone, string Country, string City, string Street)
+        public static bool Update_User(int User_ID, int Person_ID, string Username, string Password, int Permissions,
+       string FirstName, string LastName, string Email, string Phone, string Country, string City, string Street)
         {
             int RowsEffected = 0;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-
-            // we update persons and users accordingly
-            string query = @"UPDATE Persons
-                                             SET
-                                                 [FirstName] = @FirstName
-                                                ,[LastName] = @LastName
-                                                ,[Email] = @Email
-                                                ,[Phone] = @Phone
-                                                ,[Country] = @Country
-                                                ,[City] = @City
-                                                ,[Street] = @Street
-                                            WHERE Person_ID = (select Users.Person_ID from Users where User_ID = @User_ID);
-
-                                             UPDATE Users
-                                                        SET 
-                                                            [Person_ID] = @Person_ID
-                                                           ,[UserName] = @UserName
-                                                           ,[Password] = @Password
-                                                           ,[Permissions] = @Permissions
-                                                      WHERE User_ID = @User_ID ";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName",FirstName);
-            command.Parameters.AddWithValue("@LastName",LastName);
-            command.Parameters.AddWithValue("@Email",Email);
-            command.Parameters.AddWithValue("@Phone",Phone);
-            command.Parameters.AddWithValue("@Country",Country);
-            command.Parameters.AddWithValue("@City",City);
-            command.Parameters.AddWithValue("@Street",Street);
-            command.Parameters.AddWithValue("@User_ID",User_ID);
-
-
-            command.Parameters.AddWithValue("@Person_ID",Person_ID);
-            command.Parameters.AddWithValue("@UserName",Username);
-            command.Parameters.AddWithValue("@Password",Password);
-            command.Parameters.AddWithValue("@Permissions",Permissions);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                // we update persons and users accordingly
+                string query = "SP_UpdateUser";
 
-                RowsEffected = command.ExecuteNonQuery();
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
 
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    command.Parameters.AddWithValue("@FirstName", FirstName);
+                    command.Parameters.AddWithValue("@LastName", LastName);
+                    command.Parameters.AddWithValue("@Email", Email);
+                    command.Parameters.AddWithValue("@Phone", Phone);
+                    command.Parameters.AddWithValue("@Country", Country);
+                    command.Parameters.AddWithValue("@City", City);
+                    command.Parameters.AddWithValue("@Street", Street);
+                    command.Parameters.AddWithValue("@User_ID", User_ID);
 
 
-            return (RowsEffected > 0 );
+                    command.Parameters.AddWithValue("@Person_ID", Person_ID);
+                    command.Parameters.AddWithValue("@UserName", Username);
+                    command.Parameters.AddWithValue("@Password", Password);
+                    command.Parameters.AddWithValue("@Permissions", Permissions);
+
+                    try
+                    {
+                        connection.Open();
+
+                        RowsEffected = command.ExecuteNonQuery();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                    }
+                    // Removed finally block as requested
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
+
+
+            return (RowsEffected > 0);
         }
 
         public static bool Delete_User_By_ID(int User_ID)
