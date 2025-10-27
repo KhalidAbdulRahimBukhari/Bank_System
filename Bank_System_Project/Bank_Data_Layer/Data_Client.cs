@@ -71,55 +71,65 @@ namespace Bank_Data_Layer
         /// <param name="AccountNumber"></param>
         /// <returns> true if client found </returns> false if client not found
         public static bool Find_Client_By_AccountNumber
-            (ref int Client_ID, ref int Person_ID, string AccountNumber, ref string PinCode, ref double Balance
-            , ref string firstname, ref string lastname, ref string email,
-            ref string phone, ref string country, ref string city, ref string street)
+    (ref int Client_ID, ref int Person_ID, string AccountNumber, ref string PinCode, ref double Balance
+    , ref string firstname, ref string lastname, ref string email,
+    ref string phone, ref string country, ref string city, ref string street)
         {
 
             bool IsFound = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from ClientPersonView where AccountNumber = @AccountNumber";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetClientByAccountNumber";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
 
-                    Client_ID = (int)reader["Client_ID"];
-                    Person_ID = (int)reader["Person_ID"];
-                    PinCode = (string)reader["PinCode"];
-                    Balance = Convert.ToDouble(reader["Balance"]);
-                    firstname = (string)reader["FirstName"];
-                    lastname = (string)reader["LastName"];
-                    email = (string)reader["Email"];
-                    phone = (string)reader["Phone"];
-                    country = (string)reader["Country"];
-                    city = (string)reader["City"];
-                    street = (string)reader["Street"];
-                }
-                else
-                    IsFound = false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    try
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+                                Client_ID = (int)reader["Client_ID"];
+                                Person_ID = (int)reader["Person_ID"];
+                                PinCode = (string)reader["PinCode"];
+                                Balance = Convert.ToDouble(reader["Balance"]);
+                                firstname = (string)reader["FirstName"];
+                                lastname = (string)reader["LastName"];
+                                email = (string)reader["Email"];
+                                phone = (string)reader["Phone"];
+                                country = (string)reader["Country"];
+                                city = (string)reader["City"];
+                                street = (string)reader["Street"];
+                            }
+                            else
+                                IsFound = false;
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                        IsFound = false;
+                    }
+                    finally
+                    {
+                        // This line is redundant due to 'using (SqlConnection connection...)', 
+                        // but kept as requested not to remove it.
+                        connection.Close();
+                    }
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsFound;
