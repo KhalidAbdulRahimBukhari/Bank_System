@@ -121,78 +121,66 @@ namespace Bank_Data_Layer
         }
 
 
-        public static bool AddNew_User(ref int User_ID, string Username, string Password, int Permissions,
-            ref int Person_ID, string FirstName, string LastName, string Email, string Phone,
-            string Country, string City, string Street)
+        public static bool AddNew_User(ref int User_ID,string Username,string Password,int Permissions,ref int Person_ID,
+            string FirstName,string LastName,string Email,string Phone,string Country,string City,string Street)
         {
-            int Changes = 0;
+            bool isAdded = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // First we add person and get Automatic Person_ID using Scope_Identity and ExcuteScalar 
-            string query = @"INSERT INTO Persons
-                            ([FirstName],[LastName],[Email],[Phone],[Country],[City],[Street])
-                          VALUES
-                                (@FirstName,@LastName,@Email,@Phone,@Country,@City,@Street)
-		                         select top 1 SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName",FirstName);
-            command.Parameters.AddWithValue("@LastName",LastName);
-            command.Parameters.AddWithValue("@Email",Email);
-            command.Parameters.AddWithValue("@Phone",Phone);
-            command.Parameters.AddWithValue("@Country",Country);
-            command.Parameters.AddWithValue("@City",City);
-            command.Parameters.AddWithValue("@Street",Street);
-
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("SP_AddNewUser", connection))
             {
-                connection.Open();
+                command.CommandType = CommandType.StoredProcedure;
 
-                object result = command.ExecuteScalar();
+                // Input parameters for Person
+                command.Parameters.AddWithValue("@FirstName", FirstName);
+                command.Parameters.AddWithValue("@LastName", LastName);
+                command.Parameters.AddWithValue("@Email", Email);
+                command.Parameters.AddWithValue("@Phone", Phone);
+                command.Parameters.AddWithValue("@Country", Country);
+                command.Parameters.AddWithValue("@City", City);
+                command.Parameters.AddWithValue("@Street", Street);
 
-                if(result != null && int.TryParse(result.ToString(), out int ID ))
+                // Input parameters for User
+                command.Parameters.AddWithValue("@UserName", Username);
+                command.Parameters.AddWithValue("@Password", Password);
+                command.Parameters.AddWithValue("@Permissions", Permissions);
+
+                // Output parameters
+                var pPersonID = new SqlParameter("@NewPersonID", SqlDbType.Int)
                 {
-                    Person_ID = ID;
-                    Changes++;
-                }
-
-                // Second we add user and we get the new User_ID and we assign it 
-                string query_To_Add_User = @"INSERT INTO Users
-                                            ([Person_ID],[UserName],[Password],[Permissions])
-                                            VALUES
-                                                  (@Person_ID,@UserName,@Password,@Permissions)
-	                                   	    select top 1 SCOPE_IDENTITY();";
-
-                command = new SqlCommand(query_To_Add_User, connection);
-                command.Parameters.AddWithValue("@Person_ID",Person_ID);
-                command.Parameters.AddWithValue("@UserName",Username);
-                command.Parameters.AddWithValue("@Password",Password);
-                command.Parameters.AddWithValue("@Permissions",Permissions);
-                
-                
-                object result2 = command.ExecuteScalar();
-
-                if( result2 != null && int.TryParse(result2.ToString(), out int ID2 ))
+                    Direction = ParameterDirection.Output
+                };
+                var pUserID = new SqlParameter("@NewUserID", SqlDbType.Int)
                 {
-                    User_ID = ID2;
-                    Changes++;
+                    Direction = ParameterDirection.Output
+                };
+
+                command.Parameters.Add(pPersonID);
+                command.Parameters.Add(pUserID);
+
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    // Assign returned values
+                    if (pPersonID.Value != DBNull.Value && pUserID.Value != DBNull.Value)
+                    {
+                        Person_ID = (int)pPersonID.Value;
+                        User_ID = (int)pUserID.Value;
+                        isAdded = true;
+                    }
                 }
-
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    isAdded = false;
+                }
             }
 
-            return Changes > 1;
+            return isAdded;
         }
+
 
 
         public static bool Update_User(int User_ID, int Person_ID, string Username, string Password, int Permissions,

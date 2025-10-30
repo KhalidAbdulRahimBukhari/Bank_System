@@ -337,65 +337,64 @@ namespace Bank_Data_Layer
 
             return IsTransfered;
         }
-
-        public static bool Add(int Transaction_Type_ID,DateTime Date, Nullable<int> Sender_Acc,
-                                                 Nullable<int> Receiver_Acc ,double Amount ,int User_ID)
+        public static bool Add(int Transaction_Type_ID, DateTime Date, Nullable<int> Sender_Acc,
+            Nullable<int> Receiver_Acc, double Amount, int User_ID)
         {
             bool IsAdded = false;
+            int NewTransactionID = 0;
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Transactions
-                           (Transaction_Type_ID,Date,Sender_Acc,Receiver_Acc,Amount,User_ID)
-                           VALUES
-                          (@Transaction_Type_ID,@Date,@Sender_Acc,@Receiver_Acc,@Amount,@User_ID)";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Transaction_Type_ID", Transaction_Type_ID);
-            command.Parameters.AddWithValue("@Date", Date);
-
-            if(Sender_Acc != null)
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                command.Parameters.AddWithValue("@Sender_Acc", Sender_Acc);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@Sender_Acc", DBNull.Value);
-            }
-            if (Receiver_Acc != null)
-            {
-                command.Parameters.AddWithValue("@Receiver_Acc", Receiver_Acc);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@Receiver_Acc", DBNull.Value);
-            }
-            command.Parameters.AddWithValue("@Amount", Amount);
-            command.Parameters.AddWithValue("@User_ID", User_ID);
+                using (SqlCommand command = new SqlCommand("SP_AddNewTransaction", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
 
-            try
-            {
-                connection.Open();
+                    // Input parameters
+                    command.Parameters.AddWithValue("@Transaction_Type_ID", Transaction_Type_ID);
+                    command.Parameters.AddWithValue("@Date", Date);
+                    command.Parameters.AddWithValue("@Amount", Amount);
+                    command.Parameters.AddWithValue("@User_ID", User_ID);
 
-                int RowsAffected = command.ExecuteNonQuery();
+                    if (Sender_Acc != null) 
+                    { command.Parameters.AddWithValue("@Sender_Acc", Sender_Acc); }
+                    else { command.Parameters.AddWithValue("@Sender_Acc", DBNull.Value); }
 
-                if (RowsAffected > 0)
-                    IsAdded = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
 
+                    if (Receiver_Acc != null)
+                    { command.Parameters.AddWithValue("@Receiver_Acc", Receiver_Acc); }
+                    else { command.Parameters.AddWithValue("@Receiver_Acc", DBNull.Value); }
+
+                    // Output parameter
+                    var outputParam = new SqlParameter("@NewTransactionID", SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    command.Parameters.Add(outputParam);
+
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+                        if (outputParam.Value != DBNull.Value)
+                        {
+                            NewTransactionID = (int)outputParam.Value;
+                            IsAdded = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        IsAdded = false;
+                    }
+                }
+
+            }
+            
 
             return IsAdded;
         }
+
 
         public static DataTable Get_All_Transactions()
         {

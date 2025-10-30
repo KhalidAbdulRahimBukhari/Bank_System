@@ -139,187 +139,62 @@ namespace Bank_Data_Layer
         /// Adding new Client to Data Base and geting the person ID and the Client ID also creating an accountnumber
         /// </summary>
         /// <returns> true if added successfully, false if not added  </returns>
-        public static bool Add_New_Client
-            (string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street
-            , ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
+        public static bool Add_New_Client(
+     string PinCode, double Balance,
+     string firstname, string lastname, string email,
+     string phone, string country, string city, string street,
+     ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
         {
-            int changes = 0;
+            bool isSuccess = false;
 
-            // Add Person and get the new person identity
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Persons
-                           (FirstName,LastName,Email,Phone,Country,City,Street)
-                            VALUES
-                             (@FirstName,@LastName,@Email,@Phone,@Country,@City,@Street)
-                               select top 1 SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@Street", street);
-
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("SP_AddNewClient", connection))
             {
-                connection.Open();
+                command.CommandType = CommandType.StoredProcedure;
 
-                object result = command.ExecuteScalar();
+                // Input parameters
+                command.Parameters.AddWithValue("@FirstName", firstname);
+                command.Parameters.AddWithValue("@LastName", lastname);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Phone", phone);
+                command.Parameters.AddWithValue("@Country", country);
+                command.Parameters.AddWithValue("@City", city);
+                command.Parameters.AddWithValue("@Street", street);
+                command.Parameters.AddWithValue("@PinCode", PinCode);
+                command.Parameters.AddWithValue("@Balance", Balance);
 
-                if (result != null && int.TryParse(result.ToString(), out int ID))
+                // Output parameters
+                var pPersonID = new SqlParameter("@NewPersonID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                var pAccountNumber = new SqlParameter("@AccountNumber", SqlDbType.NVarChar, 50) { Direction = ParameterDirection.Output };
+                var pClientID = new SqlParameter("@NewClientID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                command.Parameters.Add(pPersonID);
+                command.Parameters.Add(pAccountNumber);
+                command.Parameters.Add(pClientID);
+
+                try
                 {
-                    New_Person_ID = ID;
-                    changes++;
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    // Assign returned values
+                    if (pPersonID.Value != DBNull.Value)
+                    {
+                        New_Person_ID = (int)pPersonID.Value;
+                        AccountNumber = pAccountNumber.Value?.ToString();
+                        New_Client_ID = (int)pClientID.Value;
+                        isSuccess = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    isSuccess = false;
                 }
             }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error : " + ex.Message);
-            }
 
-
-
-            //Add 1000 to Person ID  and assign it to account number
-            AccountNumber = (New_Person_ID + 1000).ToString();
-
-
-
-
-
-            // Add Client and get the new client identity
-            string query_2 = @"INSERT INTO Clients
-                               (Person_ID,AccountNumber,PinCode,Balance)
-                               VALUES
-                               (@Person_ID,@AccountNumber,@PinCode,@Balance)
-	                           select top 1 SCOPE_IDENTITY();";
-
-            SqlCommand command_2 = new SqlCommand(query_2, connection);
-
-            command_2.Parameters.AddWithValue("@Person_ID", New_Person_ID);
-            command_2.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-            command_2.Parameters.AddWithValue("@PinCode", PinCode);
-            command_2.Parameters.AddWithValue("@Balance", Balance);
-
-            try
-            {
-
-                object result_2 = command_2.ExecuteScalar();
-
-                if (result_2 != null && int.TryParse(result_2.ToString(), out int ID))
-                {
-                    New_Client_ID = ID;
-                    changes++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-
-
-            return (changes > 1);
+            return isSuccess;
         }
-
-        public static bool Add_New_Client_Using_3_Queries
-            (string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street
-            , ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
-        {
-            bool IsAdded = false;
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Persons
-                              (FirstName,LastName,Email,Phone,Country,City,Street)
-                            VALUES
-	                          (@FirstName,@LastName,@Email,@Phone,@Country,@City,@Street)
-                            INSERT INTO Clients
-                              (Person_ID,AccountNumber,PinCode,Balance)
-                            VALUES
-                              ((select top 1 SCOPE_IDENTITY() from Persons),@AccountNumber,@PinCode,@Balance)
-                                select top 1 SCOPE_IDENTITY() from Clients";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@Street", street);
-            command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-            command.Parameters.AddWithValue("@PinCode", PinCode);
-            command.Parameters.AddWithValue("@Balance", Balance);
-
-
-            try
-            {
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-
-                if (result != null)
-                {
-                    New_Client_ID = Convert.ToInt32(result);
-                    IsAdded = true;
-                }
-
-
-                // guery to assign Person ID
-
-                string query_to_get_assigned_Person_ID = "select Clients.Person_ID from Clients where Client_ID = @Client_ID";
-
-                command = new SqlCommand(query_to_get_assigned_Person_ID, connection);
-
-                command.Parameters.AddWithValue("@Client_ID", New_Client_ID);
-
-                New_Person_ID = Convert.ToInt32(command.ExecuteScalar());
-
-                // set account number by adding 1000 to client ID
-                AccountNumber = (New_Client_ID + 1000).ToString();
-
-                // query to update account number
-
-                string query_to_update_accountnumber = @"Update clients 
-                                                         set AccountNumber = @AccountNumber
-                                                           where Client_ID = @Client_ID;";
-
-                SqlCommand command_to_Set_AccountNumber = new SqlCommand(query_to_update_accountnumber, connection);
-
-                command_to_Set_AccountNumber.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-                command_to_Set_AccountNumber.Parameters.AddWithValue("@Client_ID", New_Client_ID);
-
-                IsAdded = (command_to_Set_AccountNumber.ExecuteNonQuery()) > 0;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-                IsAdded = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-
-            return IsAdded;
-        }
-
 
         public static bool Update_Client(int Client_ID, string PinCode, double Balance
     , string firstname, string lastname, string email,

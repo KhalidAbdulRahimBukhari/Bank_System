@@ -1,13 +1,13 @@
--- uncomment the code and run it to create stored procedures in your database 
+﻿-- uncomment the code and run it to create stored procedures in your database 
 -- this step is essential for the application to function correctly and call the correct data from SQL
 
 
 
 --USE [MyBankSystem]
 
----------------------------------------------------------------------------
---								GET All 
----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+----								GET All 
+-----------------------------------------------------------------------------
 --create procedure SP_GetAllUsers
 --AS
 --begin
@@ -30,9 +30,9 @@
 --------------------------------------------------------------------------------------
 
 
----------------------------------------------------------------------------
---							GET Client, User Or Transaction 
----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+----							GET Client, User Or Transaction 
+-----------------------------------------------------------------------------
 --create procedure [dbo].[SP_GetClientByID]
 --			@Client_ID INT
 --AS
@@ -72,7 +72,7 @@
 
 
 ---------------------------------------------------------------------------
---							Update Client OR User  
+----							Update Client OR User  
 ---------------------------------------------------------------------------
 
 
@@ -175,7 +175,7 @@
 
 
 ---------------------------------------------------------------------------
---							Delete Client OR User By ID  SPs
+----							Delete Client OR User By ID  SPs
 ---------------------------------------------------------------------------
 
 --CREATE PROCEDURE [dbo].[SP_DeleteUserByID]
@@ -226,3 +226,137 @@
 --        WHERE Person_ID = @Person_ID;
 --    END
 --END
+
+
+---------------------------------------------------------------------------
+----							Add new Client OR User SPs
+---------------------------------------------------------------------------
+--CREATE PROCEDURE [dbo].[SP_AddNewClient]
+--    @FirstName     NVARCHAR(100),
+--    @LastName      NVARCHAR(100),
+--    @Email         NVARCHAR(200),
+--    @Phone         NVARCHAR(50),
+--    @Country       NVARCHAR(100),
+--    @City          NVARCHAR(100),
+--    @Street        NVARCHAR(200),
+--    @PinCode       NVARCHAR(50),
+--    @Balance       DECIMAL(18, 2),
+
+--    -- OUTPUT parameters
+--    @NewPersonID   INT OUTPUT,
+--    @AccountNumber NVARCHAR(50) OUTPUT,
+--    @NewClientID   INT OUTPUT
+--AS
+--BEGIN
+
+--    BEGIN TRY
+--        BEGIN TRANSACTION;
+
+--        -- 1️ Insert new person
+--        INSERT INTO Persons (FirstName, LastName, Email, Phone, Country, City, Street)
+--        VALUES (@FirstName, @LastName, @Email, @Phone, @Country, @City, @Street);
+
+--        SET @NewPersonID = SCOPE_IDENTITY();
+
+--        -- 2️ Generate Account Number
+--        SET @AccountNumber = CAST(@NewPersonID + 1000 AS NVARCHAR(50));
+
+--        -- 3️ Insert client linked to that person
+--        INSERT INTO Clients (Person_ID, AccountNumber, PinCode, Balance)
+--        VALUES (@NewPersonID, @AccountNumber, @PinCode, @Balance);
+
+--        -- 4️ Get the new client ID
+--        SET @NewClientID = SCOPE_IDENTITY();
+
+--        COMMIT TRANSACTION;
+--    END TRY
+--    BEGIN CATCH
+--        IF @@TRANCOUNT > 0
+--            ROLLBACK TRANSACTION;
+
+--        -- Optional: Return nulls or default values if error occurs
+--        SET @NewPersonID = NULL;
+--        SET @AccountNumber = NULL;
+--        SET @NewClientID = NULL;
+
+--        -- You can also raise the error to the C# layer for logging
+--        THROW;
+--    END CATCH
+--END
+
+--CREATE PROCEDURE [dbo].[SP_AddNewUser]
+--    -- Input parameters for Person
+--    @FirstName NVARCHAR(100),
+--    @LastName NVARCHAR(100),
+--    @Email NVARCHAR(200),
+--    @Phone NVARCHAR(50),
+--    @Country NVARCHAR(100),
+--    @City NVARCHAR(100),
+--    @Street NVARCHAR(200),
+
+--    -- Input parameters for User
+--    @UserName NVARCHAR(100),
+--    @Password NVARCHAR(100),
+--    @Permissions INT,
+
+--    -- Output parameters
+--    @NewPersonID INT OUTPUT,
+--    @NewUserID INT OUTPUT
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    BEGIN TRY
+--        BEGIN TRANSACTION;
+
+--        -- 1️⃣ Insert new Person
+--        INSERT INTO Persons (FirstName, LastName, Email, Phone, Country, City, Street)
+--        VALUES (@FirstName, @LastName, @Email, @Phone, @Country, @City, @Street);
+
+--        SET @NewPersonID = SCOPE_IDENTITY();
+
+--        -- 2️⃣ Insert User linked to that Person
+--        INSERT INTO Users (Person_ID, UserName, [Password], Permissions)
+--        VALUES (@NewPersonID, @UserName, @Password, @Permissions);
+
+--        SET @NewUserID = SCOPE_IDENTITY();
+
+--        COMMIT TRANSACTION;
+--    END TRY
+--    BEGIN CATCH
+--        IF @@TRANCOUNT > 0
+--            ROLLBACK TRANSACTION;
+
+--        SET @NewPersonID = NULL;
+--        SET @NewUserID = NULL;
+
+--        THROW; -- rethrow error to C# for handling
+--    END CATCH
+--END
+
+
+
+--CREATE PROCEDURE [dbo].[SP_AddNewTransaction]
+--    @Transaction_Type_ID INT,
+--    @Date                DATETIME,
+--    @Sender_Acc          NVARCHAR(50),
+--    @Receiver_Acc        NVARCHAR(50),
+--    @Amount              DECIMAL(18,2),
+--    @User_ID             INT,
+--    @NewTransactionID    INT OUTPUT   -- return new ID
+--AS
+--BEGIN
+--    SET NOCOUNT ON;
+
+--    INSERT INTO Transactions
+--        (Transaction_Type_ID, [Date], Sender_Acc, Receiver_Acc, Amount, User_ID)
+--    VALUES
+--        (@Transaction_Type_ID, @Date, @Sender_Acc, @Receiver_Acc, @Amount, @User_ID);
+
+--    -- return the new transaction identity
+--    SET @NewTransactionID = SCOPE_IDENTITY();
+--END
+--GO
+
+
+
