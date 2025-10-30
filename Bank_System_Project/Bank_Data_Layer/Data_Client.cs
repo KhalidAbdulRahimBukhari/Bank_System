@@ -379,55 +379,27 @@ namespace Bank_Data_Layer
 
         public static bool Delete_Client_By_ID(int Client_ID)
         {
-            bool isDeleted = false;
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // first we get person id to use it later on
-            string query_to_get_Person_ID = "select Persons.Person_ID from Persons where Person_ID = (select Clients.Person_ID from clients where Client_ID = @Client_ID)";
-
-            SqlCommand command = new SqlCommand(query_to_get_Person_ID, connection);
-
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
+            int RowsAffected = 0;
+            string query = "SP_DeleteClientByID";
 
             try
             {
-                connection.Open();
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
 
-                int Person_ID = Convert.ToInt32(command.ExecuteScalar());
-
-
-                // second we delete client , because person cannot be deleted before client due to FK constraint
-                string query_to_delete_Client = " delete from Clients where Client_ID = @Client_ID";
-
-                command = new SqlCommand(query_to_delete_Client, connection);
-                command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-                // check if row effected hence client deleted , assign it to the boolean IsDeleted
-                isDeleted = (command.ExecuteNonQuery()) > 0;
-
-
-                // finally delete person related to the client
-                string query_to_delete_Person = "delete from Persons where Person_ID = @Person_ID";
-
-                command = new SqlCommand(query_to_delete_Person, connection);
-                command.Parameters.AddWithValue("@Person_ID", Person_ID);
-
-                // check if row effected hence Person deleted , assign it to the boolean IsDeleted
-                isDeleted = (command.ExecuteNonQuery()) > 0;
-
-
+                    connection.Open();
+                    RowsAffected = command.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
+                Console.WriteLine("Error: " + ex.Message);
             }
 
-            return isDeleted;
+            return RowsAffected > 0;
         }
 
 

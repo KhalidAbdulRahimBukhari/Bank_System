@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bank_Data_Layer
 {
@@ -253,63 +248,29 @@ namespace Bank_Data_Layer
 
         public static bool Delete_User_By_ID(int User_ID)
         {
-            int Changes = 0;
-            int Person_ID = -1;
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // query to get Person_ID and save it to use it later on
-            string query_to_get_Person_ID = @"select Persons.Person_ID from Persons where Person_ID = (select Users.Person_ID from Users where User_ID =@User_ID);";
-
-            SqlCommand command = new SqlCommand(query_to_get_Person_ID, connection);
-
-            command.Parameters.AddWithValue("@User_ID", User_ID);
+            int RowsAffected = 0;
+            string query = "SP_DeleteUserByID";
 
             try
             {
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-
-                if(result != null && int.TryParse(result.ToString(),out int ID))
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    Person_ID = ID;
-                    Changes++;
-                }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@User_ID", User_ID);
 
-            // query to delete user first the delete person accordingly due to FK_Users_Persons constraint
-            string query = @"Delete from Users where User_ID = @User_ID;
-                              Delete from Persons where Person_ID = @Person_ID ";
-            SqlCommand command_2 = new SqlCommand(query, connection);
-
-            command_2.Parameters.AddWithValue("@User_ID", User_ID);
-            command_2.Parameters.AddWithValue("@Person_ID", Person_ID);
-
-            try
-            {
-                int RowsEffected = command_2.ExecuteNonQuery();
-
-                if(RowsEffected > 1)
-                {
-                    Changes++;
+                    connection.Open();
+                    RowsAffected = command.ExecuteNonQuery();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
+                Console.WriteLine("Error: " + ex.Message);
             }
 
-            return (Changes > 1);
+            return RowsAffected > 0;
         }
+
 
         public static DataTable Get_All_Users()
         {

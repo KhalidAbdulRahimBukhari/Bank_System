@@ -172,3 +172,57 @@
 --        Person_ID = @Person_ID;
 
 --END
+
+
+---------------------------------------------------------------------------
+--							Delete Client OR User By ID  SPs
+---------------------------------------------------------------------------
+
+--CREATE PROCEDURE [dbo].[SP_DeleteUserByID]
+--    @User_ID INT
+--AS
+--BEGIN
+
+--    DECLARE @Person_ID INT;
+
+--    -- Find the person related to the user (through Users table)
+--    SELECT @Person_ID = u.Person_ID
+--    FROM Users AS u
+--    WHERE u.User_ID = @User_ID;
+
+--    -- Delete the user first
+--    DELETE FROM Users
+--    WHERE User_ID = @User_ID;
+
+--    -- Then delete the related person (if found)
+--    IF @Person_ID IS NOT NULL
+--    BEGIN
+--        DELETE FROM Persons
+--        WHERE Person_ID = @Person_ID;
+--    END
+--END
+
+
+--CREATE PROCEDURE [dbo].[SP_DeleteClientByID]
+--    @Client_ID INT
+--AS
+--BEGIN
+
+--    DECLARE @Person_ID INT;
+
+--    -- Find the person related to the client (through Clients table)
+--    SELECT @Person_ID = c.Person_ID
+--    FROM Clients AS c
+--    WHERE c.Client_ID = @Client_ID;
+
+--    -- Delete the user first
+--    DELETE FROM Clients
+--    WHERE Client_ID = @Client_ID;
+
+--    -- Then delete the related person (if found)
+--    IF @Person_ID IS NOT NULL
+--    BEGIN
+--        DELETE FROM Persons
+--        WHERE Person_ID = @Person_ID;
+--    END
+--END
