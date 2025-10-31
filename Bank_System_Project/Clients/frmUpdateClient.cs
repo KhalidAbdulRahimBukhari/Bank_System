@@ -104,7 +104,7 @@ namespace MyBankSystemDesktopApp
             {
                 _Update_CurrentClient_Info();
 
-                if (CurrentClient.Save())
+                if (CurrentClient.Save(clsGlobal.GlobalUser.User_ID))
                 {
                     MessageBox.Show("Client Saved Successfully", "Done!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

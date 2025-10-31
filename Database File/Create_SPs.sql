@@ -231,58 +231,6 @@
 ---------------------------------------------------------------------------
 ----							Add new Client OR User SPs
 ---------------------------------------------------------------------------
---CREATE PROCEDURE [dbo].[SP_AddNewClient]
---    @FirstName     NVARCHAR(100),
---    @LastName      NVARCHAR(100),
---    @Email         NVARCHAR(200),
---    @Phone         NVARCHAR(50),
---    @Country       NVARCHAR(100),
---    @City          NVARCHAR(100),
---    @Street        NVARCHAR(200),
---    @PinCode       NVARCHAR(50),
---    @Balance       DECIMAL(18, 2),
-
---    -- OUTPUT parameters
---    @NewPersonID   INT OUTPUT,
---    @AccountNumber NVARCHAR(50) OUTPUT,
---    @NewClientID   INT OUTPUT
---AS
---BEGIN
-
---    BEGIN TRY
---        BEGIN TRANSACTION;
-
---        -- 1️ Insert new person
---        INSERT INTO Persons (FirstName, LastName, Email, Phone, Country, City, Street)
---        VALUES (@FirstName, @LastName, @Email, @Phone, @Country, @City, @Street);
-
---        SET @NewPersonID = SCOPE_IDENTITY();
-
---        -- 2️ Generate Account Number
---        SET @AccountNumber = CAST(@NewPersonID + 1000 AS NVARCHAR(50));
-
---        -- 3️ Insert client linked to that person
---        INSERT INTO Clients (Person_ID, AccountNumber, PinCode, Balance)
---        VALUES (@NewPersonID, @AccountNumber, @PinCode, @Balance);
-
---        -- 4️ Get the new client ID
---        SET @NewClientID = SCOPE_IDENTITY();
-
---        COMMIT TRANSACTION;
---    END TRY
---    BEGIN CATCH
---        IF @@TRANCOUNT > 0
---            ROLLBACK TRANSACTION;
-
---        -- Optional: Return nulls or default values if error occurs
---        SET @NewPersonID = NULL;
---        SET @AccountNumber = NULL;
---        SET @NewClientID = NULL;
-
---        -- You can also raise the error to the C# layer for logging
---        THROW;
---    END CATCH
---END
 
 --CREATE PROCEDURE [dbo].[SP_AddNewUser]
 --    -- Input parameters for Person
@@ -359,4 +307,73 @@
 --GO
 
 
+
+---------------------------------------------------------------------------
+----							Updated SP to add and update ( Client & User Log Tables )
+---------------------------------------------------------------------------
+
+---- First we create the client log Table ( all dont accept nulls)
+
+--Create TABLE [dbo].[Clients_Log] (
+--    Log_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+--    Client_ID INT NOT NULL,
+--    Person_ID INT NOT NULL,
+--    AccountNumber VARCHAR(50) NOT NULL,
+--    PinCode VARCHAR(50) NOT NULL,
+--    Balance DECIMAL(18,2) NOT NULL,
+--    User_ID INT NOT NULL,
+--    Inserted_Date DATETIME NOT NULL DEFAULT GETDATE()
+--);
+
+---- Next we create the SP to insert into 2 tables then insert into Clients_Log 
+
+--Create PROCEDURE [dbo].[SP_AddNewClient]
+--    @FirstName     NVARCHAR(100),
+--    @LastName      NVARCHAR(100),
+--    @Email         NVARCHAR(200),
+--    @Phone         NVARCHAR(50),
+--    @Country       NVARCHAR(100),
+--    @City          NVARCHAR(100),
+--    @Street        NVARCHAR(200),
+--    @PinCode       NVARCHAR(50),
+--    @Balance       DECIMAL(18, 2),
+--    @Added_By_User_ID INT,
+--    @NewPersonID   INT OUTPUT,
+--    @AccountNumber NVARCHAR(50) OUTPUT,
+--    @NewClientID   INT OUTPUT
+--AS
+--BEGIN
+--    BEGIN TRY
+--        BEGIN TRANSACTION;
+
+--        -- 1️ Insert new person
+--        INSERT INTO Persons (FirstName, LastName, Email, Phone, Country, City, Street)
+--        VALUES (@FirstName, @LastName, @Email, @Phone, @Country, @City, @Street);
+
+--        SET @NewPersonID = SCOPE_IDENTITY();
+
+--        -- 2️ Generate Account Number
+--        SET @AccountNumber = CAST(@NewPersonID + 1000 AS NVARCHAR(50));
+
+--        -- 3️ Insert client linked to that person
+--        INSERT INTO Clients (Person_ID, AccountNumber, PinCode, Balance)
+--        VALUES (@NewPersonID, @AccountNumber, @PinCode, @Balance);
+
+--        SET @NewClientID = SCOPE_IDENTITY();
+
+--        -- 4️ Log directly (no trigger needed)
+--        INSERT INTO Clients_Log (
+--            Client_ID, Person_ID, AccountNumber, PinCode, Balance, User_ID, Inserted_Date
+--        )
+--        VALUES (
+--            @NewClientID, @NewPersonID, @AccountNumber, @PinCode, @Balance, @Added_By_User_ID, GETDATE()
+--        );
+
+--        COMMIT TRANSACTION;
+--    END TRY
+--    BEGIN CATCH
+--        IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
+--        THROW;
+--    END CATCH
+--END
 

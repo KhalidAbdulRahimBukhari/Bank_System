@@ -143,7 +143,7 @@ namespace Bank_Data_Layer
      string PinCode, double Balance,
      string firstname, string lastname, string email,
      string phone, string country, string city, string street,
-     ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
+     ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber, int Added_By_User_ID)
         {
             bool isSuccess = false;
 
@@ -162,6 +162,7 @@ namespace Bank_Data_Layer
                 command.Parameters.AddWithValue("@Street", street);
                 command.Parameters.AddWithValue("@PinCode", PinCode);
                 command.Parameters.AddWithValue("@Balance", Balance);
+                command.Parameters.AddWithValue("@Added_By_User_ID", Added_By_User_ID);
 
                 // Output parameters
                 var pPersonID = new SqlParameter("@NewPersonID", SqlDbType.Int) { Direction = ParameterDirection.Output };
@@ -198,7 +199,7 @@ namespace Bank_Data_Layer
 
         public static bool Update_Client(int Client_ID, string PinCode, double Balance
     , string firstname, string lastname, string email,
-    string phone, string country, string city, string street)
+    string phone, string country, string city, string street , int Updated_By_User_ID)
         {
             bool IsUpdated = false;
 

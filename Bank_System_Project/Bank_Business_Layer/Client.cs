@@ -130,7 +130,7 @@ namespace Bank_Business_Layer
         }
 
 
-        private bool _Add_New_Client()
+        private bool _Add_New_Client(int Modified_By_User_ID)
         {
             bool isAdd = false;
             int client_ID = -1;
@@ -139,7 +139,7 @@ namespace Bank_Business_Layer
 
             isAdd = clsData_Client.Add_New_Client
                  (this.PinCode, this.Balance, this.FirstName, this.LastName, this.Email, this.Phone, this.country, this.City,
-                 this.Street, ref person_ID, ref client_ID, ref accountnumber);
+                 this.Street, ref person_ID, ref client_ID, ref accountnumber , Modified_By_User_ID);
 
             if (isAdd)
             {
@@ -177,10 +177,10 @@ namespace Bank_Business_Layer
         }
 
 
-        private bool _Update_Client()
+        private bool _Update_Client(int Modified_By_User_ID)
         {
            return clsData_Client.Update_Client(this.Client_ID, this.PinCode, this.Balance, this.FirstName, this.LastName,
-                                         this.Email, this.Phone, this.country, this.City, this.Street);
+                                         this.Email, this.Phone, this.country, this.City, this.Street, Modified_By_User_ID);
             
         }
 
@@ -210,12 +210,12 @@ namespace Bank_Business_Layer
         /// function, it operates in 'eUpdate' mode, attempting to update an existing client's information. Returns true if the operation
         /// is successful, and false otherwise.
         /// </remarks>
-        public bool Save()
+        public bool Save(int Modified_By_User_ID )
         {
             switch (Mode)
             {
                 case enMode.enAddNew:
-                    if (_Add_New_Client())
+                    if (_Add_New_Client(Modified_By_User_ID))
                     {
                         Mode = enMode.enUpdate;
                         return true;
@@ -224,7 +224,7 @@ namespace Bank_Business_Layer
                         return false;
 
                 case enMode.enUpdate:
-                    return _Update_Client();
+                    return _Update_Client(Modified_By_User_ID);
             }
             return false;
         }
