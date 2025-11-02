@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2E32B30C-1D38-41D0-9BB6-065D55F52BBE}|Bank_Data_Layer\\Bank_Data_Layer.csproj|C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\bank_data_layer\\data_client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2E32B30C-1D38-41D0-9BB6-065D55F52BBE}|Bank_Data_Layer\\Bank_Data_Layer.csproj|solutionrelative:bank_data_layer\\data_client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{AC9FEE8E-DD3D-4DE1-A4E4-AEB9427EB009}|Bank_Business_Layer\\Bank_Business_Layer.csproj|c:\\users\\90552\\desktop\\bank_dev\\bank_system\\bank_system_project\\bank_business_layer\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AC9FEE8E-DD3D-4DE1-A4E4-AEB9427EB009}|Bank_Business_Layer\\Bank_Business_Layer.csproj|solutionrelative:bank_business_layer\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -11,15 +15,11 @@
       "RelativeMoniker": "D:0:0:{2E32B30C-1D38-41D0-9BB6-065D55F52BBE}|Bank_Data_Layer\\Bank_Data_Layer.csproj|solutionrelative:bank_data_layer\\data_user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79DA3F1B-9BE6-4B69-B349-C65E9FF67B5B}|Bank_Presentation_Layer_Windows_App.csproj|c:\\users\\90552\\desktop\\bank_dev\\bank_system\\bank_system_project\\clients\\frmaddclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{79DA3F1B-9BE6-4B69-B349-C65E9FF67B5B}|Bank_Presentation_Layer_Windows_App.csproj|C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\clients\\frmaddclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79DA3F1B-9BE6-4B69-B349-C65E9FF67B5B}|Bank_Presentation_Layer_Windows_App.csproj|solutionrelative:clients\\frmaddclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2E32B30C-1D38-41D0-9BB6-065D55F52BBE}|Bank_Data_Layer\\Bank_Data_Layer.csproj|C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\bank_data_layer\\data_client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2E32B30C-1D38-41D0-9BB6-065D55F52BBE}|Bank_Data_Layer\\Bank_Data_Layer.csproj|solutionrelative:bank_data_layer\\data_client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AC9FEE8E-DD3D-4DE1-A4E4-AEB9427EB009}|Bank_Business_Layer\\Bank_Business_Layer.csproj|c:\\users\\90552\\desktop\\bank_dev\\bank_system\\bank_system_project\\bank_business_layer\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{AC9FEE8E-DD3D-4DE1-A4E4-AEB9427EB009}|Bank_Business_Layer\\Bank_Business_Layer.csproj|C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\bank_business_layer\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AC9FEE8E-DD3D-4DE1-A4E4-AEB9427EB009}|Bank_Business_Layer\\Bank_Business_Layer.csproj|solutionrelative:bank_business_layer\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,7 +54,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "frmAddClient.cs",
               "DocumentMoniker": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Clients\\frmAddClient.cs",
               "RelativeDocumentMoniker": "Clients\\frmAddClient.cs",
@@ -62,18 +62,17 @@
               "RelativeToolTip": "Clients\\frmAddClient.cs",
               "ViewState": "AgIAAEkAAAAAAAAAAAAmwFUAAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-31T07:04:42.964Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-31T07:04:42.964Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Client.cs",
               "DocumentMoniker": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Bank_Business_Layer\\Client.cs",
               "RelativeDocumentMoniker": "Bank_Business_Layer\\Client.cs",
               "ToolTip": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Bank_Business_Layer\\Client.cs",
               "RelativeToolTip": "Bank_Business_Layer\\Client.cs",
-              "ViewState": "AgIAAMsAAAAAAAAAAAAqwOUAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAHwAAAAAAAAAAAASwI8AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-31T07:04:01.791Z",
               "EditorCaption": ""
@@ -88,8 +87,7 @@
               "RelativeToolTip": "Bank_Business_Layer\\User.cs",
               "ViewState": "AgIAAHwAAAAAAAAAAAAvwLcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-30T09:39:43.742Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T09:39:43.742Z"
             },
             {
               "$type": "Document",
@@ -105,7 +103,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Data_User.cs",
               "DocumentMoniker": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Bank_Data_Layer\\Data_User.cs",
               "RelativeDocumentMoniker": "Bank_Data_Layer\\Data_User.cs",
@@ -113,18 +111,17 @@
               "RelativeToolTip": "Bank_Data_Layer\\Data_User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAMIBAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-30T09:33:51.804Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-30T09:33:51.804Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Data_Client.cs",
               "DocumentMoniker": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Bank_Data_Layer\\Data_Client.cs",
               "RelativeDocumentMoniker": "Bank_Data_Layer\\Data_Client.cs",
               "ToolTip": "C:\\Users\\90552\\Desktop\\Bank_dev\\Bank_System\\Bank_System_Project\\Bank_Data_Layer\\Data_Client.cs",
               "RelativeToolTip": "Bank_Data_Layer\\Data_Client.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAA5wJwAAABHAAAAAAAAAA==",
+              "ViewState": "AgIAAEYAAAAAAAAAAADgv5cAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-26T11:52:14.805Z",
               "EditorCaption": ""

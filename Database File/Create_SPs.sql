@@ -314,6 +314,8 @@
 
 ---- First we create the client log Table ( all dont accept nulls)
 
+--drop table Clients_Log
+
 --Create TABLE [dbo].[Clients_Log] (
 --    Log_ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
 --    Client_ID INT NOT NULL,
@@ -322,10 +324,12 @@
 --    PinCode VARCHAR(50) NOT NULL,
 --    Balance DECIMAL(18,2) NOT NULL,
 --    User_ID INT NOT NULL,
---    Inserted_Date DATETIME NOT NULL DEFAULT GETDATE()
+--	Action_Type varchar(10) NOT Null,
+--    Action_Date DATETIME NOT NULL DEFAULT GETDATE()
 --);
 
----- Next we create the SP to insert into 2 tables then insert into Clients_Log 
+-- Next we create the SP to insert into 2 tables then insert into Clients_Log 
+--drop procedure [SP_AddNewClient]
 
 --Create PROCEDURE [dbo].[SP_AddNewClient]
 --    @FirstName     NVARCHAR(100),
@@ -363,10 +367,10 @@
 
 --        -- 4️ Log directly (no trigger needed)
 --        INSERT INTO Clients_Log (
---            Client_ID, Person_ID, AccountNumber, PinCode, Balance, User_ID, Inserted_Date
+--            Client_ID, Person_ID, AccountNumber, PinCode, Balance, User_ID, Action_Type, Action_Date
 --        )
 --        VALUES (
---            @NewClientID, @NewPersonID, @AccountNumber, @PinCode, @Balance, @Added_By_User_ID, GETDATE()
+--            @NewClientID, @NewPersonID, @AccountNumber, @PinCode, @Balance, @Added_By_User_ID, 'Insert', GETDATE()
 --        );
 
 --        COMMIT TRANSACTION;
