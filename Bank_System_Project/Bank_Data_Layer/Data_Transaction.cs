@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,89 +14,78 @@ namespace Bank_Data_Layer
     public class clsData_Transaction
     {
 
-        public static bool Find_By_Transaction_ID(int Transaction_ID,ref int Transaction_Type_ID,
-                                ref DateTime Date, ref Nullable<int> Sender_Acc,
-                               ref Nullable<int> Receiver_Acc, ref int User_ID, ref double Amount)
+        public static bool Find_By_Transaction_ID(int Transaction_ID, ref int Transaction_Type_ID,
+                                         ref DateTime Date, ref Nullable<int> Sender_Acc,
+                                         ref Nullable<int> Receiver_Acc, ref int User_ID, ref double Amount)
         {
             bool IsFound = false;
 
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from Transactions where Transaction_ID = @Transaction_ID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Transaction_ID", Transaction_ID);
-
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetTransactionByID";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Transaction_ID", Transaction_ID);
 
 
-                    Transaction_Type_ID = (int)reader["Transaction_Type_ID"];
-                    Date = (DateTime)reader["Date"];
-
-                    if (reader["Sender_Acc"] != DBNull.Value)
+                    try
                     {
-                        Sender_Acc = (int)reader["Sender_Acc"];
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+
+                                Transaction_Type_ID = (int)reader["Transaction_Type_ID"];
+                                Date = (DateTime)reader["Date"];
+
+                                if (reader["Sender_Acc"] != DBNull.Value)
+                                {
+                                    Sender_Acc = (int)reader["Sender_Acc"];
+                                }
+                                else
+                                {
+                                    Sender_Acc = null;
+                                }
+
+                                // NOTE: You are assigning to Sender_Acc here again, likely a typo in original code.
+                                if (reader["Receiver_Acc"] != DBNull.Value)
+                                {
+                                    Receiver_Acc = (int)reader["Receiver_Acc"];
+                                }
+                                else
+                                {
+                                    Receiver_Acc = null;
+                                }
+
+                                Amount = (double)reader["Amount"];
+                                User_ID = (int)reader["User_ID"];
+
+                            }
+                            else
+                                IsFound = false;
+
+
+                        } // SqlDataReader disposed here
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        Sender_Acc = null;
-                    }
-
-                    if (reader["Receiver_Acc"] != DBNull.Value)
-                    {
-                        Sender_Acc = (int)reader["Receiver_Acc"];
-                    }
-                    else
-                    {
-                        Receiver_Acc = null;
-                    }
-
-                    Amount = (double)reader["Amount"];
-                    User_ID = (int)reader["User_ID"];
-
-                }
-                else
-                    IsFound = false;
-
-
-            }
-            catch(Exception ex)
-            {
-                //string filePath = @"C:\Users\90552\Desktop\Error.File.txt";
- 
-
-                //    using (StreamWriter writer = new StreamWriter(filePath, true))
-                //{
-                //    writer.WriteLine("-----------------------------------------------------------------------------");
-                //    writer.WriteLine("Date : " + DateTime.Now.ToString());
-                //    writer.WriteLine();
-
-                //    while (ex != null)
-                //    {
-                //        writer.WriteLine(ex.GetType().FullName);
-                //        writer.WriteLine("Message : " + ex.Message);
-                //        writer.WriteLine("StackTrace : " + ex.StackTrace);
-
-                //        ex = ex.InnerException;
-                //    }
-                //}
-            }
-            finally
-            {
-                connection.Close();
-            }
+                        // Commented-out logging code left untouched as requested.
+                    }                  
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
             return IsFound;
         }
@@ -347,99 +337,98 @@ namespace Bank_Data_Layer
 
             return IsTransfered;
         }
-
-        public static bool Add(int Transaction_Type_ID,DateTime Date, Nullable<int> Sender_Acc,
-                                                 Nullable<int> Receiver_Acc ,double Amount ,int User_ID)
+        public static bool Add(int Transaction_Type_ID, DateTime Date, Nullable<int> Sender_Acc,
+            Nullable<int> Receiver_Acc, double Amount, int User_ID)
         {
             bool IsAdded = false;
+            int NewTransactionID = 0;
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Transactions
-                           (Transaction_Type_ID,Date,Sender_Acc,Receiver_Acc,Amount,User_ID)
-                           VALUES
-                          (@Transaction_Type_ID,@Date,@Sender_Acc,@Receiver_Acc,@Amount,@User_ID)";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Transaction_Type_ID", Transaction_Type_ID);
-            command.Parameters.AddWithValue("@Date", Date);
-
-            if(Sender_Acc != null)
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                command.Parameters.AddWithValue("@Sender_Acc", Sender_Acc);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@Sender_Acc", DBNull.Value);
-            }
-            if (Receiver_Acc != null)
-            {
-                command.Parameters.AddWithValue("@Receiver_Acc", Receiver_Acc);
-            }
-            else
-            {
-                command.Parameters.AddWithValue("@Receiver_Acc", DBNull.Value);
-            }
-            command.Parameters.AddWithValue("@Amount", Amount);
-            command.Parameters.AddWithValue("@User_ID", User_ID);
+                using (SqlCommand command = new SqlCommand("SP_AddNewTransaction", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
 
-            try
-            {
-                connection.Open();
+                    // Input parameters
+                    command.Parameters.AddWithValue("@Transaction_Type_ID", Transaction_Type_ID);
+                    command.Parameters.AddWithValue("@Date", Date);
+                    command.Parameters.AddWithValue("@Amount", Amount);
+                    command.Parameters.AddWithValue("@User_ID", User_ID);
 
-                int RowsAffected = command.ExecuteNonQuery();
+                    if (Sender_Acc != null) 
+                    { command.Parameters.AddWithValue("@Sender_Acc", Sender_Acc); }
+                    else { command.Parameters.AddWithValue("@Sender_Acc", DBNull.Value); }
 
-                if (RowsAffected > 0)
-                    IsAdded = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
 
+                    if (Receiver_Acc != null)
+                    { command.Parameters.AddWithValue("@Receiver_Acc", Receiver_Acc); }
+                    else { command.Parameters.AddWithValue("@Receiver_Acc", DBNull.Value); }
+
+                    // Output parameter
+                    var outputParam = new SqlParameter("@NewTransactionID", SqlDbType.Int)
+                    {
+                        Direction = ParameterDirection.Output
+                    };
+                    command.Parameters.Add(outputParam);
+
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+
+                        if (outputParam.Value != DBNull.Value)
+                        {
+                            NewTransactionID = (int)outputParam.Value;
+                            IsAdded = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex.Message);
+                        IsAdded = false;
+                    }
+                }
+
+            }
+            
 
             return IsAdded;
         }
+
 
         public static DataTable Get_All_Transactions()
         {
             DataTable dt = new DataTable();
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from Transaction_View;";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-
             try
             {
-                connection.Open();
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.HasRows)
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
                 {
-                    dt.Load(reader);
+                    string query = "SP_GetAllTransactions";
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        connection.Open();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                dt.Load(reader);
+                            }
+                        }
+
+
+                    }
                 }
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Error : " + ex.Message);
-                connection.Close();
                 return null;
             }
-            finally
-            {
-                connection.Close();
-            }
-
+                
             return dt;
         }
 

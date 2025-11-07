@@ -7,3 +7,12 @@ C:\C# Files\MyBankSystemDesktopApp\Bank_Business_Layer\obj\Debug\Bank_Business_L
 C:\C# Files\MyBankSystemDesktopApp\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.dll
 C:\C# Files\MyBankSystemDesktopApp\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.pdb
 C:\C# Files\MyBankSystemDesktopApp\Bank_Business_Layer\obj\Debug\Bank_Bus.C803E8A3.Up2Date
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\bin\Debug\Bank_Business_Layer.dll
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\bin\Debug\Bank_Business_Layer.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\bin\Debug\Bank_Data_Layer.dll
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\bin\Debug\Bank_Data_Layer.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.csproj.AssemblyReference.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.csproj.CoreCompileInputs.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\obj\Debug\Bank_Bus.C803E8A3.Up2Date
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.dll
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\Bank_Business_Layer\obj\Debug\Bank_Business_Layer.pdb

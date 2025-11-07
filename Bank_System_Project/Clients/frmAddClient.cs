@@ -83,7 +83,7 @@ namespace MyBankSystemDesktopApp
                 client.City = txtCity.Text;
                 client.Street = txtStreet.Text;
 
-                if(client.Save())
+                if(client.Save(clsGlobal.GlobalUser.User_ID))
                 {
                     txtAccountNumber.Text = client.AccountNumber.ToString();
                     MessageBox.Show("Client " + client.AccountNumber + "has been saved successfully");

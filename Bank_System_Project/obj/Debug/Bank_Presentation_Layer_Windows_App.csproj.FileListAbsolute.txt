@@ -31,3 +31,37 @@ C:\C# Files\MyBankSystemDesktopApp\bin\Debug\Bank_Data_Layer.pdb
 C:\C# Files\MyBankSystemDesktopApp\obj\Debug\Bank_Pre.FDD1E4A2.Up2Date
 C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.exe
 C:\C# Files\MyBankSystemDesktopApp\obj\Debug\MyBankSystemDesktopApp.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\MyBankSystemDesktopApp.exe.config
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\MyBankSystemDesktopApp.exe
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\MyBankSystemDesktopApp.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\Bank_Business_Layer.dll
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\Bank_Data_Layer.dll
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\Bank_Business_Layer.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\bin\Debug\Bank_Data_Layer.pdb
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\Bank_Presentation_Layer_Windows_App.csproj.AssemblyReference.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.exe.config
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmAddClient.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Clients.frmDeleteClient.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmUpdateClient.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Clients.frmshowClients.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmAccessDenied.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmMainScreen.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Transactions.frmDeposit.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Transactions.frmTransfersLog.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Transactions.frmTransactionsMenue.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Transactions.frmTransfer.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Transactions.frmWithdraw.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Users.frmShowUsers.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Clients.frmUsersLog.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmManageClients.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.frmUserLogin.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Properties.Resources.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Users.frmAddUser.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Users.frmDeleteUser.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Users.frmUpdateUser.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.Users.frmManageUsers.resources
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\Bank_Presentation_Layer_Windows_App.csproj.GenerateResource.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\Bank_Presentation_Layer_Windows_App.csproj.CoreCompileInputs.cache
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\Bank_Pre.FDD1E4A2.Up2Date
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.exe
+C:\Users\90552\Desktop\Bank_dev\Bank_System\Bank_System_Project\obj\Debug\MyBankSystemDesktopApp.pdb

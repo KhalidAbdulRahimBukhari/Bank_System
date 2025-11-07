@@ -13,53 +13,58 @@ namespace Bank_Data_Layer
         /// <param name="Client_ID"></param>
         /// <returns> true if client found </returns> false if client not found
         public static bool Find_Client_By_ID
-            (int Client_ID, ref int Person_ID, ref string AccountNumber, ref string PinCode, ref double Balance
-            , ref string firstname, ref string lastname, ref string email,
-            ref string phone, ref string country, ref string city, ref string street)
+    (int Client_ID, ref int Person_ID, ref string AccountNumber, ref string PinCode, ref double Balance
+    , ref string firstname, ref string lastname, ref string email,
+    ref string phone, ref string country, ref string city, ref string street)
         {
             bool IsFound = false;
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from ClientPersonView where Client_ID = @Client_ID";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetClientByID";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    
+                    command.CommandType = CommandType.StoredProcedure;
 
-                    Person_ID = (int)reader["Person_ID"];
-                    AccountNumber = (string)reader["AccountNumber"];
-                    PinCode = (string)reader["PinCode"];
-                    Balance = Convert.ToDouble(reader["Balance"]);
-                    firstname = (string)reader["FirstName"];
-                    lastname = (string)reader["LastName"];
-                    email = (string)reader["Email"];
-                    phone = (string)reader["Phone"];
-                    country = (string)reader["Country"];
-                    city = (string)reader["City"];
-                    street = (string)reader["Street"];
-                }
-            }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error : " +  ex.Message);
-                IsFound = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
+
+                    try
+                    {
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+                                Person_ID = (int)reader["Person_ID"];
+                                AccountNumber = (string)reader["AccountNumber"];
+                                PinCode = (string)reader["PinCode"];
+                                Balance = Convert.ToDouble(reader["Balance"]);
+                                firstname = (string)reader["FirstName"];
+                                lastname = (string)reader["LastName"];
+                                email = (string)reader["Email"];
+                                phone = (string)reader["Phone"];
+                                country = (string)reader["Country"];
+                                city = (string)reader["City"];
+                                street = (string)reader["Street"];
+                            }
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        //Console.WriteLine("Error : " +  ex.Message);
+                        IsFound = false;
+                    }
+                   
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
             return IsFound;
         }
@@ -71,55 +76,59 @@ namespace Bank_Data_Layer
         /// <param name="AccountNumber"></param>
         /// <returns> true if client found </returns> false if client not found
         public static bool Find_Client_By_AccountNumber
-            (ref int Client_ID, ref int Person_ID, string AccountNumber, ref string PinCode, ref double Balance
-            , ref string firstname, ref string lastname, ref string email,
-            ref string phone, ref string country, ref string city, ref string street)
+    (ref int Client_ID, ref int Person_ID, string AccountNumber, ref string PinCode, ref double Balance
+    , ref string firstname, ref string lastname, ref string email,
+    ref string phone, ref string country, ref string city, ref string street)
         {
 
             bool IsFound = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = "select * from ClientPersonView where AccountNumber = @AccountNumber";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                string query = "SP_GetClientByAccountNumber";
 
-                SqlDataReader reader = command.ExecuteReader();
-
-                if (reader.Read())
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    IsFound = true;
+                    command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
+                        command.CommandType = CommandType.StoredProcedure;
 
-                    Client_ID = (int)reader["Client_ID"];
-                    Person_ID = (int)reader["Person_ID"];
-                    PinCode = (string)reader["PinCode"];
-                    Balance = Convert.ToDouble(reader["Balance"]);
-                    firstname = (string)reader["FirstName"];
-                    lastname = (string)reader["LastName"];
-                    email = (string)reader["Email"];
-                    phone = (string)reader["Phone"];
-                    country = (string)reader["Country"];
-                    city = (string)reader["City"];
-                    street = (string)reader["Street"];
-                }
-                else
-                    IsFound = false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                    try
+                    {
+                        connection.Open();
+
+                        // Added using for SqlDataReader
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (reader.Read())
+                            {
+                                IsFound = true;
+
+                                Client_ID = (int)reader["Client_ID"];
+                                Person_ID = (int)reader["Person_ID"];
+                                PinCode = (string)reader["PinCode"];
+                                Balance = Convert.ToDouble(reader["Balance"]);
+                                firstname = (string)reader["FirstName"];
+                                lastname = (string)reader["LastName"];
+                                email = (string)reader["Email"];
+                                phone = (string)reader["Phone"];
+                                country = (string)reader["Country"];
+                                city = (string)reader["City"];
+                                street = (string)reader["Street"];
+                            }
+                            else
+                                IsFound = false;
+                        } // SqlDataReader disposed here
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                        IsFound = false;
+                    }                
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsFound;
@@ -130,251 +139,114 @@ namespace Bank_Data_Layer
         /// Adding new Client to Data Base and geting the person ID and the Client ID also creating an accountnumber
         /// </summary>
         /// <returns> true if added successfully, false if not added  </returns>
-        public static bool Add_New_Client
-            (string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street
-            , ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
+        public static bool Add_New_Client(
+     string PinCode, double Balance,
+     string firstname, string lastname, string email,
+     string phone, string country, string city, string street,
+     ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber, int Added_By_User_ID)
         {
-            int changes = 0;
+            bool isSuccess = false;
 
-            // Add Person and get the new person identity
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Persons
-                           (FirstName,LastName,Email,Phone,Country,City,Street)
-                            VALUES
-                             (@FirstName,@LastName,@Email,@Phone,@Country,@City,@Street)
-                               select top 1 SCOPE_IDENTITY();";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@Street", street);
-
-
-            try
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+            using (SqlCommand command = new SqlCommand("SP_AddNewClient", connection))
             {
-                connection.Open();
+                command.CommandType = CommandType.StoredProcedure;
 
-                object result = command.ExecuteScalar();
+                // Input parameters
+                command.Parameters.AddWithValue("@FirstName", firstname);
+                command.Parameters.AddWithValue("@LastName", lastname);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Phone", phone);
+                command.Parameters.AddWithValue("@Country", country);
+                command.Parameters.AddWithValue("@City", city);
+                command.Parameters.AddWithValue("@Street", street);
+                command.Parameters.AddWithValue("@PinCode", PinCode);
+                command.Parameters.AddWithValue("@Balance", Balance);
+                command.Parameters.AddWithValue("@Added_By_User_ID", Added_By_User_ID);
 
-                if (result != null && int.TryParse(result.ToString(), out int ID))
+                // Output parameters
+                var pPersonID = new SqlParameter("@NewPersonID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+                var pAccountNumber = new SqlParameter("@AccountNumber", SqlDbType.NVarChar, 50) { Direction = ParameterDirection.Output };
+                var pClientID = new SqlParameter("@NewClientID", SqlDbType.Int) { Direction = ParameterDirection.Output };
+
+                command.Parameters.Add(pPersonID);
+                command.Parameters.Add(pAccountNumber);
+                command.Parameters.Add(pClientID);
+
+                try
                 {
-                    New_Person_ID = ID;
-                    changes++;
+                    connection.Open();
+                    command.ExecuteNonQuery();
+
+                    // Assign returned values
+                    if (pPersonID.Value != DBNull.Value)
+                    {
+                        New_Person_ID = (int)pPersonID.Value;
+                        AccountNumber = pAccountNumber.Value?.ToString();
+                        New_Client_ID = (int)pClientID.Value;
+                        isSuccess = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                    isSuccess = false;
                 }
             }
-            catch (Exception ex)
-            {
-                //Console.WriteLine("Error : " + ex.Message);
-            }
 
-
-
-            //Add 1000 to Person ID  and assign it to account number
-            AccountNumber = (New_Person_ID + 1000).ToString();
-
-
-
-
-
-            // Add Client and get the new client identity
-            string query_2 = @"INSERT INTO Clients
-                               (Person_ID,AccountNumber,PinCode,Balance)
-                               VALUES
-                               (@Person_ID,@AccountNumber,@PinCode,@Balance)
-	                           select top 1 SCOPE_IDENTITY();";
-
-            SqlCommand command_2 = new SqlCommand(query_2, connection);
-
-            command_2.Parameters.AddWithValue("@Person_ID", New_Person_ID);
-            command_2.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-            command_2.Parameters.AddWithValue("@PinCode", PinCode);
-            command_2.Parameters.AddWithValue("@Balance", Balance);
-
-            try
-            {
-
-                object result_2 = command_2.ExecuteScalar();
-
-                if (result_2 != null && int.TryParse(result_2.ToString(), out int ID))
-                {
-                    New_Client_ID = ID;
-                    changes++;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-
-
-            return (changes > 1);
+            return isSuccess;
         }
-
-        public static bool Add_New_Client_Using_3_Queries
-            (string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street
-            , ref int New_Person_ID, ref int New_Client_ID, ref string AccountNumber)
-        {
-            bool IsAdded = false;
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"INSERT INTO Persons
-                              (FirstName,LastName,Email,Phone,Country,City,Street)
-                            VALUES
-	                          (@FirstName,@LastName,@Email,@Phone,@Country,@City,@Street)
-                            INSERT INTO Clients
-                              (Person_ID,AccountNumber,PinCode,Balance)
-                            VALUES
-                              ((select top 1 SCOPE_IDENTITY() from Persons),@AccountNumber,@PinCode,@Balance)
-                                select top 1 SCOPE_IDENTITY() from Clients";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@Street", street);
-            command.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-            command.Parameters.AddWithValue("@PinCode", PinCode);
-            command.Parameters.AddWithValue("@Balance", Balance);
-
-
-            try
-            {
-                connection.Open();
-
-                object result = command.ExecuteScalar();
-
-                if (result != null)
-                {
-                    New_Client_ID = Convert.ToInt32(result);
-                    IsAdded = true;
-                }
-
-
-                // guery to assign Person ID
-
-                string query_to_get_assigned_Person_ID = "select Clients.Person_ID from Clients where Client_ID = @Client_ID";
-
-                command = new SqlCommand(query_to_get_assigned_Person_ID, connection);
-
-                command.Parameters.AddWithValue("@Client_ID", New_Client_ID);
-
-                New_Person_ID = Convert.ToInt32(command.ExecuteScalar());
-
-                // set account number by adding 1000 to client ID
-                AccountNumber = (New_Client_ID + 1000).ToString();
-
-                // query to update account number
-
-                string query_to_update_accountnumber = @"Update clients 
-                                                         set AccountNumber = @AccountNumber
-                                                           where Client_ID = @Client_ID;";
-
-                SqlCommand command_to_Set_AccountNumber = new SqlCommand(query_to_update_accountnumber, connection);
-
-                command_to_Set_AccountNumber.Parameters.AddWithValue("@AccountNumber", AccountNumber);
-                command_to_Set_AccountNumber.Parameters.AddWithValue("@Client_ID", New_Client_ID);
-
-                IsAdded = (command_to_Set_AccountNumber.ExecuteNonQuery()) > 0;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-                IsAdded = false;
-            }
-            finally
-            {
-                connection.Close();
-            }
-
-
-            return IsAdded;
-        }
-
 
         public static bool Update_Client(int Client_ID, string PinCode, double Balance
-            , string firstname, string lastname, string email,
-             string phone, string country, string city, string street)
+    , string firstname, string lastname, string email,
+    string phone, string country, string city, string street , int Updated_By_User_ID)
         {
             bool IsUpdated = false;
 
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // we have to update each person info and client info seperately becuase they are 2 different tables
-
-            string query = @"UPDATE Persons
-                                             SET
-                                                 [FirstName] = @FirstName
-                                                ,[LastName] = @LastName
-                                                ,[Email] = @Email
-                                                ,[Phone] = @Phone
-                                                ,[Country] = @Country
-                                                ,[City] = @City
-                                                ,[Street] = @Street
-                                            WHERE
-                                              Person_ID = (select Clients.Person_ID from Clients where Client_ID = @Client_ID);
-                                              UPDATE Clients
-                                                 SET 
-                                                     [PinCode] = @PinCode
-                                                    ,[Balance] = @Balance
-                                               WHERE
-                                                     Client_ID = @Client_ID;";
-
-
-            SqlCommand command = new SqlCommand(query, connection);
-
-            command.Parameters.AddWithValue("@FirstName", firstname);
-            command.Parameters.AddWithValue("@LastName", lastname);
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@Phone", phone);
-            command.Parameters.AddWithValue("@Country", country);
-            command.Parameters.AddWithValue("@City", city);
-            command.Parameters.AddWithValue("@street", street);
-
-            command.Parameters.AddWithValue("@PinCode", PinCode);
-            command.Parameters.AddWithValue("@Balance", Balance);
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-            try
+            // Added using for SqlConnection
+            using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
             {
-                connection.Open();
+                // we have to update each person info and client info seperately becuase they are 2 different tables
 
-                int RowsEffected = command.ExecuteNonQuery();
+                string query = @"SP_UpdateClient";
 
-                if (RowsEffected > 0)
-                    IsUpdated = true;
-                else
-                    IsUpdated = false;
 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
+                // Added using for SqlCommand
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    // Added CommandType
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@FirstName", firstname);
+                    command.Parameters.AddWithValue("@LastName", lastname);
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Phone", phone);
+                    command.Parameters.AddWithValue("@Country", country);
+                    command.Parameters.AddWithValue("@City", city);
+                    command.Parameters.AddWithValue("@street", street);
+
+                    command.Parameters.AddWithValue("@PinCode", PinCode);
+                    command.Parameters.AddWithValue("@Balance", Balance);
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
+
+                    try
+                    {
+                        connection.Open();
+
+                        int RowsEffected = command.ExecuteNonQuery();
+
+                        if (RowsEffected > 0)
+                            IsUpdated = true;
+                        else
+                            IsUpdated = false;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error : " + ex.Message);
+                    }
+                } // SqlCommand disposed here
+            } // SqlConnection closed and disposed here
 
 
             return IsUpdated;
@@ -383,55 +255,27 @@ namespace Bank_Data_Layer
 
         public static bool Delete_Client_By_ID(int Client_ID)
         {
-            bool isDeleted = false;
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            // first we get person id to use it later on
-            string query_to_get_Person_ID = "select Persons.Person_ID from Persons where Person_ID = (select Clients.Person_ID from clients where Client_ID = @Client_ID)";
-
-            SqlCommand command = new SqlCommand(query_to_get_Person_ID, connection);
-
-            command.Parameters.AddWithValue("@Client_ID", Client_ID);
+            int RowsAffected = 0;
+            string query = "SP_DeleteClientByID";
 
             try
             {
-                connection.Open();
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@Client_ID", Client_ID);
 
-                int Person_ID = Convert.ToInt32(command.ExecuteScalar());
-
-
-                // second we delete client , because person cannot be deleted before client due to FK constraint
-                string query_to_delete_Client = " delete from Clients where Client_ID = @Client_ID";
-
-                command = new SqlCommand(query_to_delete_Client, connection);
-                command.Parameters.AddWithValue("@Client_ID", Client_ID);
-
-                // check if row effected hence client deleted , assign it to the boolean IsDeleted
-                isDeleted = (command.ExecuteNonQuery()) > 0;
-
-
-                // finally delete person related to the client
-                string query_to_delete_Person = "delete from Persons where Person_ID = @Person_ID";
-
-                command = new SqlCommand(query_to_delete_Person, connection);
-                command.Parameters.AddWithValue("@Person_ID", Person_ID);
-
-                // check if row effected hence Person deleted , assign it to the boolean IsDeleted
-                isDeleted = (command.ExecuteNonQuery()) > 0;
-
-
+                    connection.Open();
+                    RowsAffected = command.ExecuteNonQuery();
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                connection.Close();
+                Console.WriteLine("Error: " + ex.Message);
             }
 
-            return isDeleted;
+            return RowsAffected > 0;
         }
 
 
@@ -472,40 +316,38 @@ namespace Bank_Data_Layer
         {
             DataTable dt = new DataTable();
 
-
-            SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString);
-
-            string query = @"select * from ClientPersonView";
-
-            SqlCommand command = new SqlCommand(query, connection);
-
             try
             {
-                connection.Open();
-
-                SqlDataReader read = command.ExecuteReader();
-
-                if (read.HasRows)
+                using (SqlConnection connection = new SqlConnection(clsData_Access_Settings.ConnectionString))
                 {
-                    dt.Load(read);
-                }
+                    string query = "SP_GetAllClients";
+
+
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                            command.CommandType = CommandType.StoredProcedure;
+                       
+                            connection.Open();
+
+                            using (SqlDataReader read = command.ExecuteReader())
+                            {
+                                if (read.HasRows)
+                                {
+                                    dt.Load(read);
+                                }
+                            } //sql Datareader is closed and disposed 
+
+                    }// Sqlcommand is disposed here
+
+                }// connection is closed and disposed here
             }
-            catch (Exception ex)
+            catch (Exception )
             {
-                //Console.WriteLine("Error : " + ex.Message);
-                //connection.Close();
-                //return null;
-            }
-            finally
-            {
-                connection.Close();
+                 return null;
             }
 
-            return dt;
+                        return dt;
 
         }
-
-
-
     }
 }
